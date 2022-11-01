@@ -23,13 +23,13 @@ payments.forEach((p) => {
 })
 
 const listener = onSnapshot(collection(db, 'payments'), (data) => {
-    console.log()
+    data.forEach((d) => console.log(d.id, '=>', d.data()))
 })
 
 const list = () => {
-    
+
     console.log(paymentList)
-    
+
 
 
     return (
@@ -55,7 +55,7 @@ const list = () => {
                                     <td>
                                         <button>Edit</button>
                                         <button className="btn-primary">Delete</button>
-                                        
+
                                     </td>
                             </tr>
                         ))}
@@ -63,9 +63,9 @@ const list = () => {
                 </table>
             </div>
             <div>
-                
+
             </div>
-            
+
         </div>
     )
 }

@@ -2,11 +2,24 @@ import React, { useReducer, useState } from 'react'
 import { db } from '../config'
 import { addDoc, collection } from 'firebase/firestore'
 
-const collectionId = '635fed3f1a5f1a8556e7'
-const dbId = '635fed2c809e8b16f608'
+type State = {};
 
+type FormData = {
+    title: string,
+    price: string,
+    category: string,
+    month: string,
+};
 
-const formReducer = (state, event) => {
+const initialPayload: FormData = {
+    title: '',
+    price: '',
+    category: '',
+    month: '',
+}
+
+const formReducer = (state: FormData, event: {name: string, value: string}) => {
+    console.log(event)
     return {
         ...state,
         [event.name]: event.value
@@ -15,17 +28,20 @@ const formReducer = (state, event) => {
 
 const form = () => {
 
-    const [formData, setFormData] = useReducer(formReducer, {})
+    const [formData, setFormData] = useReducer(formReducer, initialPayload)
     const [submitting, setSubmitting] = useState(false)
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setSubmitting(true)
-        
+
+        const date = new Date()
+        formData.month = date.toLocaleDateString('default', {month: 'long'})
+
         await addDoc(collection(db, 'payments'), formData)
     }
 
-    const handleChange = (e) => {
+    const handleChange = (e: { target: { name: string, value: string }}) => {
         setFormData({
             name: e.target.name,
             value: e.target.value,
@@ -47,7 +63,8 @@ const form = () => {
 
                     <div className="col-3 input-control">
                         <label>Category</label>
-                        <select onChange={handleChange} name="category">
+                        <select onChange={handleChange} name="category" required>
+                            <option value="">Category...</option>
                             <option value="coffee">Coffee</option>
                             <option value="groceries">Groceries</option>
                             <option value="rent">Rent</option>
@@ -64,20 +81,8 @@ const form = () => {
                             <button className="btn-primary" type="submit">Save</button>
                         </div>
                     </div>
-                    
-                </div>
 
-                {submitting &&
-                <div>
-                    Données sur le point d'être enregistrées :
-
-                    <ul>
-                        {Object.entries(formData).map(([name, value]) => (
-                            <li key={name}><strong>{name}</strong>: {value.toString()}</li>
-                        ))}
-                    </ul>
                 </div>
-                }
         </form>
     )
 }
