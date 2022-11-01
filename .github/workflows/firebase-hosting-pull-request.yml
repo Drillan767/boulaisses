@@ -4,16 +4,15 @@
 name: Deploy to Firebase Hosting on PR
 'on': pull_request
 jobs:
-  create_env_file:
-    run: |
-      touch .env
-      echo ${{ secrets.ENV_CONTENT }} >> .env
-      cat .env
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
-    steps:
+   steps:
       - uses: actions/checkout@v2
+      - run: |
+        touch .env
+        echo ${{ secrets.ENV_CONTENT }} >> .env
+        cat .env
       - run: yarn install --frozen-lockfile && yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

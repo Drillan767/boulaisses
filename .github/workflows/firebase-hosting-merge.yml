@@ -7,15 +7,14 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-  create_env_file:
-    run: |
-      touch .env
-      echo ${{ secrets.ENV_CONTENT }} >> .env
-      cat .env
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: |
+        touch .env
+        echo ${{ secrets.ENV_CONTENT }} >> .env
+        cat .env
       - run: yarn install --frozen-lockfile && yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
