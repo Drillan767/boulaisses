@@ -16,7 +16,7 @@ jobs:
           fail_on_empty: true
           envkey_VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
           envkey_VITE_AUTH_DOMAIN: ${{ secrets.VITE_AUTH_DOMAIN }}
-          envkey_VITE_PROJECT_ID: ${{ secrets.VITE_PROJECT_ID }}
+          envkey_VITE_VITE_DB_URL: ${{ secrets.VITE_DB_URL }}
           envkey_VITE_PROJECT_ID: ${{ secrets.VITE_PROJECT_ID }}
           envkey_VITE_STORAGE: ${{ secrets.VITE_STORAGE }}
           envkey_VITE_MESSENGER_ID: ${{ secrets.VITE_MESSENGER_ID }}
