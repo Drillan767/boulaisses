@@ -1,5 +1,5 @@
 import { db } from "../config";
-import { doc, onSnapshot, getDocs, collection } from "firebase/firestore";
+import { doc, onSnapshot, getDocs, collection, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { Pie } from 'react-chartjs-2';
 
 type Payment = {
@@ -10,27 +10,24 @@ type Payment = {
     month: string,
 }
 
-const payments = await getDocs(collection(db, 'payments'))
 const paymentList: Payment[] = []
 
-payments.forEach((p) => {
-    const data = p.data()
-    data.id = p.id
+onSnapshot(collection(db, 'payments'), (data) => addToList(data))
 
-    if (data.title !== '') {
-        paymentList.push(data as Payment)
-    }
-})
-
-const listener = onSnapshot(collection(db, 'payments'), (data) => {
-    data.forEach((d) => console.log(d.id, '=>', d.data()))
-})
+const addToList = (data: QuerySnapshot<DocumentData>) => {
+    data.forEach((d) => {
+        if (!paymentList.some((l) => l.id === d.id)) {
+            const data = d.data()
+            const payment = {
+                id: d.id,
+                ...data
+            }
+            paymentList.push(payment as Payment)
+        }
+    })
+}
 
 const list = () => {
-
-    console.log(paymentList)
-
-
 
     return (
         <div className="row">
@@ -53,9 +50,8 @@ const list = () => {
                                         <span className="tag">{p.category}</span>
                                     </td>
                                     <td>
-                                        <button>Edit</button>
-                                        <button className="btn-primary">Delete</button>
-
+                                        <button className="btn--sm">Edit</button>
+                                        <button className="btn-primary btn--sm">Delete</button>
                                     </td>
                             </tr>
                         ))}
@@ -63,9 +59,9 @@ const list = () => {
                 </table>
             </div>
             <div>
-
+                
             </div>
-
+            
         </div>
     )
 }
