@@ -1,6 +1,7 @@
 import { db } from "../config";
-import { doc, onSnapshot, getDocs, collection, QuerySnapshot, DocumentData } from "firebase/firestore";
+import { onSnapshot, getDocs, collection, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { Pie } from 'react-chartjs-2';
+import { useEffect, useState } from "react";
 
 type Payment = {
     title: string,
@@ -10,28 +11,40 @@ type Payment = {
     month: string,
 }
 
-const paymentList: Payment[] = []
-
-onSnapshot(collection(db, 'payments'), (data) => addToList(data))
-
-const addToList = (data: QuerySnapshot<DocumentData>) => {
-    data.forEach((d) => {
-        if (!paymentList.some((l) => l.id === d.id)) {
-            const data = d.data()
-            const payment = {
-                id: d.id,
-                ...data
-            }
-            paymentList.push(payment as Payment)
-        }
-    })
-}
-
 const list = () => {
+
+    const [payments, setPayment] = useState([] as Payment[]);
+
+    const addToList = (data: QuerySnapshot<DocumentData>) => {
+        data.forEach((payment) => {
+            if (!payments.some((p) => p.id === payment.id)) {
+                const p = {
+                    id: payment.id,
+                    ...payment.data()
+                }
+    
+                setPayment([...payments, p as Payment])
+            }
+        })
+    }
+
+    const getPayments = async () => {
+        const data = await getDocs(collection(db, 'payments'))
+        addToList(data)
+    }
+
+    useEffect(() => {
+        getPayments()
+    }, [])
+
+    onSnapshot(collection(db, 'payments'), (data) => {
+        addToList(data)
+    })
 
     return (
         <div className="row">
             <div className="col-6">
+                <p>Nombre d'éléments à afficher :  {payments.length}</p>
                 <table className="table">
                     <thead>
                         <tr>
@@ -42,7 +55,7 @@ const list = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {paymentList.map((p) => (
+                        {payments.map((p) => (
                             <tr key={p.id}>
                                 <td>{p.title}</td>
                                     <td>{p.price} €</td>
@@ -59,7 +72,7 @@ const list = () => {
                 </table>
             </div>
             <div>
-                
+                // graphs.
             </div>
             
         </div>

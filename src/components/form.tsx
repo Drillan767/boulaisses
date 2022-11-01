@@ -2,8 +2,6 @@ import React, { useReducer, useState } from 'react'
 import { db } from '../config'
 import { addDoc, collection } from 'firebase/firestore'
 
-type State = {};
-
 type FormData = {
     title: string,
     price: string,
@@ -19,7 +17,6 @@ const initialPayload: FormData = {
 }
 
 const formReducer = (state: FormData, event: {name: string, value: string}) => {
-    console.log(event)
     return {
         ...state,
         [event.name]: event.value

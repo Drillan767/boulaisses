@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Form from './components/form'
 import List from './components/list'
 import { firebase } from './config'
-import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
 
 
 const provider = new GoogleAuthProvider();
@@ -11,7 +11,7 @@ function App() {
     const auth = getAuth()
     onAuthStateChanged(auth, (user) => {
         if (!user) {
-            signInWithPopup(auth, provider)
+            signInWithRedirect(auth, provider)
         }
     })
     return (
