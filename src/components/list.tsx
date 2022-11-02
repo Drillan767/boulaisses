@@ -12,7 +12,6 @@ type Payment = {
 }
 
 const list = () => {
-
     const [payments, setPayment] = useState([] as Payment[]);
 
     const addToList = (data: QuerySnapshot<DocumentData>) => {
@@ -22,7 +21,7 @@ const list = () => {
                     id: payment.id,
                     ...payment.data()
                 }
-    
+
                 setPayment([...payments, p as Payment])
             }
         })
@@ -74,7 +73,7 @@ const list = () => {
             <div>
                 // graphs.
             </div>
-            
+
         </div>
     )
 }

@@ -1,9 +1,6 @@
-import { useState } from 'react'
 import Form from './components/form'
 import List from './components/list'
-import { firebase } from './config'
 import { getAuth, onAuthStateChanged, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
-
 
 const provider = new GoogleAuthProvider();
 
@@ -21,8 +18,6 @@ function App() {
             </h1>
             <Form />
             <List />
-        
-    
         </div>
     )
 }
