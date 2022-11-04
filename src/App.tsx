@@ -12,7 +12,7 @@ function App() {
         }
     })
     return (
-        <div className="App">
+        <div className="container-fluid">
             <h1 className='u-center'>
                 DÉPENSES DU MOIS DE SEPTEMBRE
             </h1>
