@@ -1,60 +1,41 @@
-import { db } from '../config'
-import { doc, setDoc } from "firebase/firestore";
 import { Modal, Button, Form } from 'react-bootstrap'
 import { useEffect, useReducer } from 'react';
+import { ModalProps, FormEvent, Action } from '../types';
+import { db } from '../config'
+import { doc, setDoc } from "firebase/firestore";
 
-type Props = {
-    payment: {
-        title: string,
-        id: string,
-        category: string,
-        price: string,
-        date: string,
-    }
-    showModal: boolean
-    handleClose: () => void
-}
-
-const formReducer = (state: Props['payment'], action: {name: string, value: string}) => {
+const formReducer = (state: ModalProps['payment'], action: Action) => {
     return {
         ...state,
         [action.name]: action.value
     }
 }
 
-const EditModal = (props: Props) => {
+const EditModal = (props: ModalProps) => {
 
     const [formData, setFormData] = useReducer(formReducer, props.payment)
 
     useEffect(() => {
-        let entry: keyof Props['payment']
+        let entry: keyof ModalProps['payment']
 
         for (entry in props.payment) {
             setFormData({name: entry, value: props.payment[entry]})
-            
-            if (entry === 'category') {
-                console.log(props.payment[entry])
-            }
         }
 
-        setFormData({name: 'title', value: 'Titre assigné'})
     }, [props.payment])
 
-    const handleUpdate = () => {
-        console.log(formData)
+    const handleUpdate = async () => {
+        const docRef = doc(db, 'payments', props.payment.id)
+        await setDoc(docRef, formData)
+        props.handleClose()
     }
 
-    const handleChange = (e: { target: { name: string, value: string }}) => {
-        if (e.target.name === 'category') {
-            console.log(e.target.value)
-        }
-
+    const handleChange = (e: FormEvent) => {
         setFormData({
             name: e.target.name,
             value: e.target.value,
         })
     }
-
 
     return (
         <Modal show={props.showModal} onHide={props.handleClose}>
@@ -113,7 +94,7 @@ const EditModal = (props: Props) => {
                     Cancel
                 </Button>
                 <Button variant="primary" onClick={() => handleUpdate()}>
-                    Update info
+                    Update infos
                 </Button>
             </Modal.Footer>
         </Modal>

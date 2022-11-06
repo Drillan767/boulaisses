@@ -21,7 +21,6 @@ const initialPayload: FormData = {
     price: '',
     category: '',
     date: '',
-    
 }
 
 const formReducer = (state: FormData, event: Reducer) => {
