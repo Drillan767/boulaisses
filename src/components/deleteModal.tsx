@@ -1,7 +1,6 @@
 import { db } from '../config'
 import { doc, deleteDoc } from "firebase/firestore";
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button'
+import { Modal, Button } from 'react-bootstrap'
 
 type Props = {
     payment: {

@@ -3,6 +3,7 @@ import { onSnapshot, getDocs, collection, QuerySnapshot, DocumentData } from "fi
 import { Pie } from 'react-chartjs-2';
 import { useEffect, useState } from "react";
 import DeleteModale from './deleteModal'
+import EditModale from './editModal'
 
 type Payment = {
     title: string,
@@ -14,12 +15,19 @@ type Payment = {
 
 const list = () => {
     const [payments, setPayment] = useState([] as Payment[]);
-    const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletePayment, setDeletePayment] = useState({} as Payment)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [editPayment, setEditPayment] = useState({} as Payment)
 
     const handleDelete = (payment: Payment) => {
-        handleShow()
+        setShowDeleteModal(false)
         setDeletePayment(payment)
+    }
+
+    const handleEdit = (payment: Payment) => {
+        setShowEditModal(true)
+        setEditPayment(payment)
     }
 
     const addToList = (data: QuerySnapshot<DocumentData>) => {
@@ -35,8 +43,11 @@ const list = () => {
         })
     }
 
-    const handleShow = () => setShowModal(true)
-    const handleClose = () => setShowModal(false)
+
+
+    const handleShowDelete = () => setShowDeleteModal(true)
+    const handleCloseDelete = () => setShowDeleteModal(false)
+    const handleShowEdit = () => {}
 
     const getPayments = async () => {
         const data = await getDocs(collection(db, 'payments'))
@@ -75,7 +86,7 @@ const list = () => {
                                     </td>
                                     <td>{p.date}</td>
                                     <td>
-                                        <button className="btn btn-secondary me-2" onClick={handleShow}>
+                                        <button className="btn btn-secondary me-2" onClick={() => handleEdit(p)}>
                                             Edit
                                         </button>
                                         <button className="btn btn-danger" onClick={() => handleDelete(p)}>
@@ -93,9 +104,17 @@ const list = () => {
 
             <DeleteModale
                 payment={deletePayment}
-                showModal={showModal}
-                handleClose={handleClose}
+                showModal={showDeleteModal}
+                handleClose={() => setShowDeleteModal(false)}
             />
+
+            <EditModale
+                payment={editPayment}
+                showModal={showEditModal}
+                handleClose={() => setShowEditModal(false)}
+            />
+
+
         </div>
     )
 }

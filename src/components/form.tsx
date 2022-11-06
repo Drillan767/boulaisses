@@ -8,7 +8,7 @@ type FormData = {
     category: string,
     date: string,
     reset?: boolean
-};
+}
 
 type Reducer = {
     name: string,
