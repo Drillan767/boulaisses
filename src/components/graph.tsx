@@ -1,33 +1,10 @@
-import { 
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    TimeScale,
-    Title,
-    ArcElement,
-    Tooltip,
-    Legend,
-
-} from 'chart.js';
-
-import type { ChartData, ChartOptions } from 'chart.js'
+import { Chart as ChartJS, registerables, ChartOptions } from 'chart.js';
+import { Tabs, Tab } from 'react-bootstrap'
 import { Pie, Bar } from 'react-chartjs-2'
-import { useRef } from 'react';
+import { getStackedBarData, categories } from '../assets/utils';
 import { PaymentsProps } from "../types"
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    TimeScale,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend
-)
+ChartJS.register(...registerables)
 
 const graph = ({ payments }: PaymentsProps) => {
 
@@ -57,18 +34,37 @@ const graph = ({ payments }: PaymentsProps) => {
           },
         ],
       }
-    
-    const dailyData = {
-        datasets: []
-    }
-
-    const ref = useRef()
 
     return (
-        <div>
-            <Pie data={data} options={{responsive: true}} />
-        </div>
-        
+        <>
+            <Tabs>
+                <Tab eventKey={'second'} title='Per day'>
+                    <Bar
+                        data={{
+                            labels: categories.map((c) => c.title),
+                            datasets: getStackedBarData(payments)
+                        }}
+                        options={{
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                    min: '2021-11-07 00:00:00',
+                                },
+                                y: {
+                                    stacked: true,
+                                }
+                            }
+                        } as ChartOptions<'bar'>}
+                    />
+                </Tab>
+                <Tab eventKey={'first'} title='Per category'>
+                    <Pie data={data} options={{responsive: true}} />
+                </Tab>
+                <Tab eventKey={'third'} title='Total'>
+
+                </Tab>
+            </Tabs>
+        </>
     )
 }
 

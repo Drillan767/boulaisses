@@ -35,3 +35,12 @@ export type ModalProps = {
     showModal: boolean
     handleClose: () => void
 }
+
+export type StackedBarStruct = {
+    label: string,
+        backgroundColor: string,
+        data: {
+            x: string,
+            y: string,
+        }[]
+}[]
