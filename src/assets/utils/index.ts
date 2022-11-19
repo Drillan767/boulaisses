@@ -1,60 +1,23 @@
-import type { Payment, PaymentsProps, StackedBarStruct } from "../../types"
+import type { Payment, PaymentsProps, StackedBarStruct, Category } from "../../types"
+import { getDocs, collection } from 'firebase/firestore'
+import { db } from '../../config'
 
-export const categories = [
-    {
-        title: 'Money income',
-        internal: 'money-income',
-        color: '#0f4f1e',
-    },
-    {
-        title: 'Savings',
-        internal: 'Savings',
-        color: '#e2e2e2',
-    },
-    {
-        title: 'Rent',
-        internal: 'rent',
-        color: '#76777c',
-    },
-    {
-        title: 'Groceries',
-        internal: 'groceries',
-        color: '#ff0f95',
-    },
-    {
-        title: 'Restaurants',
-        internal: 'restaurants',
-        color: '#efc763',
-    },
-    {
-        title: 'Coffee',
-        internal: 'coffee',
-        color: '#dc9e91',
-    },
-    {
-        title: 'Self treat',
-        internal: 'self-treat',
-        color: '#0557e8',
-    },
-    {
-        title: 'Monthly bills',
-        internal: 'monthly-bills',
-        color: '#24436d',
-    },
-    {
-        title: 'Unexpected spendings',
-        internal: 'unexpected',
-        color: '#ff0f4a',
-    },
-    {
-        title: 'Other',
-        internal: 'misc',
-        color: '#793851',
-    }
-]
+export const getCategories = async () => {
+    let list = [] as Category[]
+    await getDocs(collection(db, 'categories'))
+        .then((data) => {
+            data.forEach((d) => {
+                list.push(d.data() as Category)
+            })
+        })
 
-export const getStackedBarData = (payments: Payment[]) => {
+    return list
+}
+
+export const getStackedBarData = async (payments: Payment[]) => {
     let result = [] as StackedBarStruct
+    let categories = await getCategories()
+
     categories.forEach((category) => {
         let ds = {
             label: category.title,
@@ -75,4 +38,56 @@ export const getStackedBarData = (payments: Payment[]) => {
     })
 
     return result
+}
+
+export const getPieData = async (payments: Payment[]) => {
+    let categories = await getCategories()
+    let data = [] as {category: string, total: number}[]
+    let bgColors = [] as string[]
+
+    categories.forEach((category) => {
+        payments.forEach((payment) => {
+            if (payment.category === category.internal) {
+                const pi = data.find((obj) => obj.category === category.internal)
+                // data[pi] = ""
+                console.log(pi)
+            }
+        })
+        bgColors.push(hexToRGba(category.color))
+    })
+
+
+    console.log(data, bgColors)
+    
+    return {
+        labels: ['bl', 'bl', 'bl'],
+        datasets: [{
+            label: 'Label type',
+            data: [1, 2, 3, 4],
+            backgroundColor: ['color1', 'color2', 'color3']
+        }]
+    }
+}
+
+const getLineData = async (payment: Payment[]) => {
+
+}
+
+const hexToRGba = (hexCode: string, opacity: number = 1) => {
+    let hex = hexCode.replace('#', '');
+    
+    if (hex.length === 3) {
+        hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+    }    
+    
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    
+    /* Backward compatibility for whole number based opacity values. */
+    if (opacity > 1 && opacity <= 100) {
+        opacity = opacity / 100;   
+    }
+
+    return `rgba(${r},${g},${b},${opacity})`;
 }

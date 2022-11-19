@@ -22,11 +22,6 @@ const Dashboard = () => {
         })
     }
 
-    const getPayments = async () => {
-        const data = await getDocs(collection(db, 'payments'))
-        addToList(data)
-    }
-
     onSnapshot(collection(db, 'payments'), (data) => {
         addToList(data)
     })

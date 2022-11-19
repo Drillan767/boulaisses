@@ -1,39 +1,31 @@
+import { useState, useEffect } from 'react';
 import { Chart as ChartJS, registerables, ChartOptions } from 'chart.js';
 import { Tabs, Tab } from 'react-bootstrap'
 import { Pie, Bar } from 'react-chartjs-2'
-import { getStackedBarData, categories } from '../assets/utils';
-import { PaymentsProps } from "../types"
+import { getStackedBarData, getCategories } from '../assets/utils'; // getPieData
+import { Category, PaymentsProps, StackedBarStruct } from "../types" // PieStruct
 
 ChartJS.register(...registerables)
 
+// const categories = [] as Category[]
+
+
 const graph = ({ payments }: PaymentsProps) => {
 
-    const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [
-          {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-          },
-        ],
-      }
+    const [categories, setCategories] = useState([] as Category[])
+    const [barData, SetBarData] = useState([] as StackedBarStruct)
+    // const [pieData, setPieData] = useState({} as PieStruct)
+
+    useEffect(() => {
+        (async () => {
+            const c = await getCategories()
+            setCategories(c)
+            const sb = await getStackedBarData(payments)
+            SetBarData(sb)
+            // const p = await getPieData(payments)
+            //setPieData(p)
+        })()
+    }, [categories, barData]) //pieData
 
     return (
         <>
@@ -42,7 +34,7 @@ const graph = ({ payments }: PaymentsProps) => {
                     <Bar
                         data={{
                             labels: categories.map((c) => c.title),
-                            datasets: getStackedBarData(payments)
+                            datasets: barData
                         }}
                         options={{
                             scales: {
@@ -58,7 +50,22 @@ const graph = ({ payments }: PaymentsProps) => {
                     />
                 </Tab>
                 <Tab eventKey={'first'} title='Per category'>
-                    <Pie data={data} options={{responsive: true}} />
+                    <Pie
+                        data={{
+                            labels: ['bl', 'bl', 'bl', 'bl'],
+                            datasets: [{
+                                label: 'Label type',
+                                data: [1, 2, 3, 4],
+                                backgroundColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(54, 162, 235)',
+                                    'rgb(255, 206, 86)',
+                                    'rgb(75, 192, 192)',
+                                ]
+                            }]
+                        }}
+                        options={{responsive: true}}
+                    />
                 </Tab>
                 <Tab eventKey={'third'} title='Total'>
 

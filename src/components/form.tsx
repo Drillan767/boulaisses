@@ -37,7 +37,6 @@ const formReducer = (state: FormData, event: Reducer) => {
         ...state,
         [event.name]: event.value
     }
-    
 }
 
 const form = () => {

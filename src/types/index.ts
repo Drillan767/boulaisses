@@ -13,6 +13,12 @@ export type Reducer = {
     refresh?: boolean,
 }
 
+export type Category = {
+    title: string,
+    internal: string,
+    color: string
+}
+
 export type Action = {
     name: string,
     value: string
@@ -38,9 +44,18 @@ export type ModalProps = {
 
 export type StackedBarStruct = {
     label: string,
-        backgroundColor: string,
-        data: {
-            x: string,
-            y: string,
-        }[]
+    backgroundColor: string,
+    data: {
+        x: string,
+        y: string,
+    }[]
 }[]
+
+export type PieStruct = {
+    labels: string[],
+    datasets: {
+        label: string,
+        backgroundColor: string[],
+        data: number[]
+    }[],
+}
