@@ -2,7 +2,7 @@ import { Col, Button, Row, Container, Card, Form, Alert } from 'react-bootstrap'
 import React, { useState } from 'react'
 import useAuthStore from '../stores/auth'
 
-const Login = () => {
+const AbsolutelyNewLogin = () => {
 
     const [login, loginError] = useAuthStore((state) => [state.login, state.loginError])
     const [email, setEmail] = useState('')
@@ -72,4 +72,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default AbsolutelyNewLogin
