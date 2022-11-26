@@ -9,6 +9,7 @@ const Login = () => {
     const [password, setPassword] = useState('')
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
+        console.log('coucou')
         e.preventDefault()
         login({email, password})
     }
