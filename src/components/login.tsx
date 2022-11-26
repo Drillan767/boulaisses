@@ -1,34 +1,16 @@
-import { Col, Button, Row, Container, Card, Form, Alert } from "react-bootstrap";
-import React, { useState, useCallback } from "react";
-import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
-import { firebase } from "../config";
+import { Col, Button, Row, Container, Card, Form, Alert } from 'react-bootstrap'
+import React, { useState } from 'react'
+import useAuthStore from '../stores/auth'
 
 const Login = () => {
-    const [error, setError] = useState('')
-    const [credentials, setCredentials] = useState({email: '', password: ''})
-    const updateCredentials = useCallback(
-        (type: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-            setCredentials({...credentials, [type]: event.target.value})
-        }, [credentials]
-    )
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [login, loginError] = useAuthStore((state) => [state.login, state.loginError])
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        setError('')
-        const auth = getAuth(firebase)
-        signInWithEmailAndPassword(auth, credentials.email, credentials.password)
-            .catch((e) => {
-                
-                switch (e.code) {
-                    case 'auth/wrong-password':
-                        setError('I am 4 parallel universes ahead of you.')
-                        break
-
-                    case 'auth/user-not-found':
-                        setError('New phone who dis')
-                        break
-                }
-            })
+        login({email, password})
     }
 
     return (
@@ -42,15 +24,14 @@ const Login = () => {
                                     💸 B O U L A I S S E S 💸
                                 </h2>
                                 <div className="mb-3">
-                                    <Form onSubmit={handleSubmit}>
+                                    <Form onSubmit={submit}>
                                         {
-                                            error !== '' && 
-                                            <Alert variant="danger">
-                                                {error}
-                                            </Alert>
-
+                                            loginError !== '' && 
+                                                <Alert variant="danger" className='mt-4'>
+                                                    {loginError}
+                                                </Alert>
                                         }
-                                        
+
                                         <Form.Group className="mb-3" controlId="formBasicEmail">
                                             <Form.Label className="text-center">
                                                 Email address
@@ -58,11 +39,10 @@ const Login = () => {
                                             <Form.Control
                                                 type="email"
                                                 placeholder="Enter email"
-                                                onChange={updateCredentials('email')}
-                                                value={credentials.email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                value={email}
                                             />
                                         </Form.Group>
-
                                         <Form.Group
                                             className="mb-3"
                                             controlId="formBasicPassword"
@@ -71,8 +51,8 @@ const Login = () => {
                                             <Form.Control 
                                                 type="password"
                                                 placeholder="Password"
-                                                onChange={updateCredentials('password')}
-                                                value={credentials.password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                value={password}
                                             />
                                         </Form.Group>
                                         <div className="d-grid">

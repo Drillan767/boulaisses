@@ -36,6 +36,11 @@ export type PaymentsProps = {
     payments: Payment[]
 }
 
+export type Credentials = {
+    email: string,
+    password: string
+}
+
 export type ModalProps = {
     payment: Omit<Payment, 'reset'>
     showModal: boolean

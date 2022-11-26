@@ -1,24 +1,26 @@
-import { useState } from "react";
-import Login from "./components/login";
-import Dashboard from "./components/dashboard";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {getAuth, onAuthStateChanged } from 'firebase/auth'
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import useAuthStore from './stores/auth'
 import { firebase } from './config'
 
 const auth = getAuth(firebase)
 
 function App() {
-    const [isLoggedIn, setAuth] = useState(false)
+    const [isLoggedIn, setAuthStatus] = useAuthStore((state) => [state.isLoggedIn, state.setAuthStatus])
 
     onAuthStateChanged(auth, (user) => {
-        setAuth(user !== null)
+        if (user && isLoggedIn === false) {
+            setAuthStatus(true)
+        }
     })
 
     return (
         <>
             {
-            isLoggedIn
-                ? <Dashboard />
-                : <Login />
+                isLoggedIn
+                    ? <Dashboard />
+                    : <Login />
             }
         </>
     )
