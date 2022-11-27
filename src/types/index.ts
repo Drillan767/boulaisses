@@ -4,7 +4,6 @@ export type Payment = {
     price: string,
     category: string,
     date: string,
-    reset?: boolean
 }
 
 export type Reducer = {

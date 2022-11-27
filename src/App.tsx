@@ -1,6 +1,6 @@
 import {getAuth, onAuthStateChanged } from 'firebase/auth'
-import Login from './components/AbsolutelyNewLogin';
-import Dashboard from './components/AbsolutelyNewDashboard';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 import useAuthStore from './stores/auth'
 import { firebase } from './config'
 

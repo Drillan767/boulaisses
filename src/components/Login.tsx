@@ -2,14 +2,13 @@ import { Col, Button, Row, Container, Card, Form, Alert } from 'react-bootstrap'
 import React, { useState } from 'react'
 import useAuthStore from '../stores/auth'
 
-const AbsolutelyNewLogin = () => {
+const Login = () => {
 
     const [login, loginError] = useAuthStore((state) => [state.login, state.loginError])
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
-        console.log('coucou')
         e.preventDefault()
         login({email, password})
     }
@@ -72,4 +71,4 @@ const AbsolutelyNewLogin = () => {
     )
 }
 
-export default AbsolutelyNewLogin
+export default Login
