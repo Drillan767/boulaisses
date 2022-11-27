@@ -67,7 +67,7 @@ const editModal = (props: ModalProps) => {
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Category</Form.Label>
-                        <Form.Select value={formData.category} onChange={handleChange} required>
+                        <Form.Select value={formData.category} name="category" onChange={handleChange} required>
                             {
                                 categories.map((c) => (
                                     <option value={c.internal} key={c.internal}>{c.title}</option>

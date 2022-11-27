@@ -1,6 +1,7 @@
 import Form from './dashboard/Form'
 import List from './dashboard/List'
 import useAuthStore from '../stores/auth'
+import Tabs from './graphs/Tabs'
 
 const Dashboard = () => {
 
@@ -23,6 +24,9 @@ const Dashboard = () => {
             <div className="row mt-5">
                 <div className="col-6">
                     <List />
+                </div>
+                <div className="col-6">
+                    <Tabs />
                 </div>
 
             </div>

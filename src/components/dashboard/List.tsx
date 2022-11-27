@@ -29,6 +29,7 @@ const List = () => {
     }, [])
 
     const findCategory = (internal: string) => categories.find((c) => c.internal === internal)?.title ?? 'N/A'
+    const formatDate = (date: string) => new Intl.DateTimeFormat('fr-FR').format(new Date(date))
 
     return (
         <div>
@@ -49,7 +50,7 @@ const List = () => {
                                 <td>{payment.title}</td>
                                 <td>{payment.price} €</td>
                                 <td>{findCategory(payment.category)}</td>
-                                <td>{payment.date}</td>
+                                <td>{formatDate(payment.date)}</td>
                                 <td>
                                     <button className="btn btn-secondary me-2" onClick={() => handleEdit(payment)}>
                                         Edit
