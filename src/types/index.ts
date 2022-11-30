@@ -1,15 +1,11 @@
+import { Timestamp } from "@firebase/firestore"
+
 export type Payment = {
     id: string,
     title: string,
     price: string,
     category: string,
     date: string,
-}
-
-export type Reducer = {
-    name: string,
-    value: string,
-    refresh?: boolean,
 }
 
 export type Category = {
@@ -23,26 +19,14 @@ export type Action = {
     value: string
 }
 
-export type FormEvent = {
-    target: Action
-}
-
-export type PaymentProps = {
-    payment: Payment
-}
-
-export type PaymentsProps = {
-    payments: Payment[]
-}
-
 export type Credentials = {
     email: string,
     password: string
 }
 
 export type ModalProps = {
-    payment: Omit<Payment, 'reset'>
-    showModal: boolean
+    payment: Payment,
+    showModal: boolean,
     handleClose: () => void
 }
 
@@ -55,11 +39,13 @@ export type StackedBarStruct = {
     }[]
 }[]
 
-export type PieStruct = {
-    labels: string[],
-    datasets: {
-        label: string,
-        backgroundColor: string[],
-        data: number[]
-    }[],
+export type Month = {
+    id: string,
+    beginDate: Timestamp,
+    value: string
+}
+
+export type MonthModal = {
+    showModal: boolean,
+    handleClose: () => void
 }

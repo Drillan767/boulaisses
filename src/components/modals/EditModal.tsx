@@ -1,5 +1,5 @@
 import { Modal, Button, Form } from 'react-bootstrap'
-import { useReducer, useEffect, FormEvent } from 'react'
+import { useReducer, useEffect } from 'react'
 import usePaymentStore from '../../stores/payments'
 import useCategoryStore from '../../stores/categories'
 import type { ModalProps, Action } from '../../types'

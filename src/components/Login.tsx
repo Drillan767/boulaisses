@@ -1,5 +1,5 @@
 import { Col, Button, Row, Container, Card, Form, Alert } from 'react-bootstrap'
-import React, { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import useAuthStore from '../stores/auth'
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    const submit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         login({email, password})
     }

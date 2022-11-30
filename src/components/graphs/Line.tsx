@@ -2,17 +2,20 @@ import { Line } from 'react-chartjs-2'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale } from 'chart.js'
 import usePaymentStore from '../../stores/payments';
 import { Payment } from '../../types'
+import useMonthsStore from '../../stores/months';
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale)
 
 const LineChart = () => {
+    let beginDate = ''
     const [payments] = usePaymentStore((state) => [state.payments])
+    useMonthsStore.subscribe((newMonth) => beginDate = newMonth.currentMonth.beginDate)
 
     const options = {
         scales: {
             x: {
                 stacked: true,
-                min: '2022-10-01',
+                min: beginDate,
             },
             y: {
                 stacked: true,
@@ -40,7 +43,10 @@ const LineChart = () => {
         for (const date in orderedDate) {
             const [{ y: lastItem }] = data.slice(-1) || 0
             const test = orderedDate[date].reduce((acc, curr) => {
-                acc -= parseFloat(curr.price)
+                curr.category === 'income'
+                    ? acc += parseFloat(curr.price)
+                    : acc -= parseFloat(curr.price)
+                
                 return acc
             }, lastItem)
 

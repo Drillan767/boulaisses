@@ -1,23 +1,33 @@
 import Form from './dashboard/Form'
 import List from './dashboard/List'
+import MonthSelector from './dashboard/MonthSelector'
 import useAuthStore from '../stores/auth'
+import useMonthsStore from '../stores/months'
 import Tabs from './graphs/Tabs'
 
 const Dashboard = () => {
 
     const [logout] = useAuthStore((state) => [state.logout])
+    const [currentMonth] = useMonthsStore((state) => [state.currentMonth])
 
     return (
         <div className="container-fluid">
-            <div className="d-flex justify-content-end mt-2">
-                <button className="btn btn-primary" onClick={logout}>
-                    Logout
-                </button>
+            <div className="row mt-2">
+                <MonthSelector />
+                <div className="ms-auto col-sm-1">
+                    <button className="btn btn-primary" onClick={logout}>
+                        Logout
+                    </button>
+                </div>
             </div>
 
-            <h1 className="text-center">
-                DÉPENSES
-            </h1>
+            {
+                currentMonth.value &&
+                <h1 className="text-center my-4">
+                    SPENDINGS FOR {currentMonth.value.toUpperCase()}
+                </h1>
+            }
+
 
             <Form />
 
@@ -30,10 +40,10 @@ const Dashboard = () => {
                 </div>
 
             </div>
-            
+
 
         </div>
     )
 }
-            
+
 export default Dashboard                                                                                                                                                                                                        

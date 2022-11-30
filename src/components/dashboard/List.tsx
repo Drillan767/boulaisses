@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useLoginStore from '../../stores/payments'
 import useCategoryStore from '../../stores/categories'
 import type { Payment } from '../../types'
@@ -6,7 +6,7 @@ import EditModal from '../modals/EditModal'
 import DeleteModal from '../modals/DeleteModal'
 
 const List = () => {
-    const [payments, loadPayments] = useLoginStore((state) => [state.payments, state.loadPayments])
+    const [payments] = useLoginStore((state) => [state.payments])
     const [categories] = useCategoryStore((state) => [state.categories])
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -23,10 +23,6 @@ const List = () => {
         setShowEditModal(true)
         setEditPayment(payment)
     }
-
-    useEffect(() => {
-        if (!payments.length) loadPayments()
-    }, [])
 
     const findCategory = (internal: string) => categories.find((c) => c.internal === internal)?.title ?? 'N/A'
     const formatDate = (date: string) => new Intl.DateTimeFormat('fr-FR').format(new Date(date))
