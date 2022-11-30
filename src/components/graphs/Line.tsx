@@ -9,7 +9,7 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement,
 const LineChart = () => {
     let beginDate = ''
     const [payments] = usePaymentStore((state) => [state.payments])
-    useMonthsStore.subscribe((newMonth) => beginDate = newMonth.currentMonth.beginDate)
+    useMonthsStore.subscribe((newMonth) => beginDate = newMonth.currentMonth.beginDate.toString())
 
     const options = {
         scales: {

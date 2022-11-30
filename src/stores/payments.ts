@@ -10,7 +10,6 @@ interface PaymentSore {
     addPayment: (payment: Omit<Payment, 'id'>) => void,
     editPayment: (payment: Payment) => void,
     deletePayment: (id: string) => void,
-    testLoad: (id?: string) => void,
 }
 
 let monthId = useMonthsStore.getState().currentMonth.id
@@ -60,13 +59,7 @@ const usePaymentStore = create<PaymentSore>((set, get) => ({
         const docRef= doc(db, 'months', monthId, 'payments', id)
         await deleteDoc(docRef)
         await get().loadPayments()
-    },
-
-    testLoad: (id?: string) => {
-
-        console.log('current id is ', monthId)
     }
-
 }))
 
 export default usePaymentStore
