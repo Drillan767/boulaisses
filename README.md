@@ -9,3 +9,4 @@ CRUD experiment with my money handling as an excuse.
 - [ ] Better handling of money income
 - [ ] Fix begin date on Stacked Bars
 - [ ] Fix chartjs date order on X axis
+- [ ] Details of each category + total for this category
