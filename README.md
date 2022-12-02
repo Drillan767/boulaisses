@@ -6,3 +6,5 @@ CRUD experiment with my money handling as an excuse.
 - [ ] Responsive
 - [ ] Filter Table by date 
 - [ ] Order by price
+- [ ] Better handling of money income
+- [ ] Fix begin date on Stacked Bars
